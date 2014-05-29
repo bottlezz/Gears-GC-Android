@@ -1,0 +1,78 @@
+
+
+#bodyContainer
+{
+	font-family:  "Comic Sans MS";
+	font-size: 48px;
+	width:  1100px;
+	min-height: 760px;
+	min-width: 600px;
+	background-image:url('../img/who_is_1280.png');
+	background-repeat: no-repeat;
+	background-color:#deedd;
+	margin-left:auto;
+	margin-right:auto;
+}
+.btn-center
+{
+	font-size: 80px;
+	color: #5c6d66;
+	margin-top: 10px;
+	outline: 0;
+	border: 0px;
+	width: 1100px;
+	height: 160px;  
+	background-color: transparent;
+	background-image: url("../img/button_1280.png");
+	background-repeat: no-repeat;
+	
+
+}
+.btn-center:hover{
+	background-image: url("../img/select_1280.png");
+	
+}
+.stage {
+	font-size: 80px;
+	padding-top: 768px;
+}
+label{
+	display: inline-block;
+	min-width: 160px;
+	width:10%;
+}
+li.selected{
+	border:2px solid red;
+	width: 500px
+}
+#Username{
+	/*font-family: "stencil";*/
+	font-size: 86px;
+	outline: none;
+	border: 0;
+	background-color: transparent;;
+	min-width: 960px;
+	height: 138px;
+	width:100%;
+	padding-left: 530px;
+}
+.NameHolder{
+	width: 1100px;
+	height: 128px;
+	background-repeat: no-repeat;
+	background-image: url("../img/name_1280.png");
+}
+#numChooser select{
+	font-size: 80px;
+	border: 0;
+	background-color: transparent;
+	/*width: 160px;*/
+	text-indent: 20px;
+	display:inline-block;
+	color: #5c6d66;
+}
+#numChooser p{
+	font-size: 80px;
+	display:inline-block;
+	color: #5c6d66;
+}

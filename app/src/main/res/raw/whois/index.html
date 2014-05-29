@@ -1,0 +1,424 @@
+<html>
+<head>
+
+	<script type="text/javascript" src="config.js"></script>
+	<script type="text/javascript" src="adapt.min.js"></script>
+    <script type="text/javascript" src="gamecenter.js"></script>
+
+	<script type="text/javascript" src="whois.js"></script>
+    
+</head>
+<body bgcolor='#deedd'>
+	<div id="bodyContainer">
+		
+		<div id="GameEnter" class="stage">
+			<div class="NameHolder">
+				
+				<input id="Username" type="text">
+			</div>
+			<div id="numChooser" hidden>
+				<select id="numQuestion" style="background-color:#ffffff">
+					<option value="1">1 question to play.</option>
+					<option value="5">5 questions to play.</option>
+					<option value="10">10 questions to play.</option>
+					<option value="20">20 questions to play.</option>
+				</select>
+				
+			</div>
+			<p name="waitingMsg" hidden>Waiting for other players...</p>
+			<div class="UserListContainer">
+				<div class="UsersListHolder"> 
+				<ul name="ReadyUserList">
+
+					
+				</ul>
+			</div>
+			</div>
+
+			<div class="button Container">
+				<button id="ReadyButton" class="btn-center"  onclick="ReadyButtonClick()" >Ready</button>
+
+				<button id="StartButton" class="btn-center"  onclick="StartButtonClick()" hidden>Start</button>
+			</div>
+			
+		</div>
+		<div id="GameOn" class="stage" hidden>
+			<div class="QuestionHolder"> 
+				<h3 name="question">Answer it</h3>
+			</div>
+			<div class="UsersListHolder"> 
+				<ul id="UsersList">
+					<li>haha</li>
+				</ul>
+			</div>
+			<button id='SubmitVoteButton' class="btn-center" onclick="SubmitVoteButtonClick()" >Submit </button>
+			<div id="waitingHint" > </div>
+		</div>
+		<div id="GameResult" class="stage" hidden>
+			<div class="QuestionHolder">
+				<h3 name="question">Answer it</h3>
+			</div>
+			<div class="UsersListHolder">
+				<ol id="UsersRankList">
+					<li>haha</li>
+				</ol>
+			</div>
+			<div class="UserListContainer">
+				<div class="UsersListHolder"> 
+				<ul name="ReadyUserList">
+					
+				</ul>
+			</div>
+			<button id="Result-ReadyButton" class="btn-center" onclick="ReadyButtonClick()" >Ready</button>
+
+			<button id="Result-StartButton" class="btn-center" onclick="StartButtonClick()" >Start</button>
+			
+			<button id="Result-RestartButton" class="btn-center" onclick="RestartButtonClick()" hidden>Restart</button>
+
+		</div>
+	</div>
+	<audio hidden id="ding">
+  		<source id="dingsrc" src="" type="audio/mpeg">
+	</audio>
+	
+</body>
+<script type="text/javascript">
+	
+	/*
+	function UpdateGameEnterPage(){
+		var userList = UserList;
+		var Ulist= document.getElementById("ReadyUserList");
+		Ulist.innerHTML='';
+			
+		for(var index in userList){
+			var user=userList[index];
+			console.log(user);
+			//Ulist.innerHTML+="<li><button onclick='"+'ListItemClick("'+user.Username+'")'+"'>"+user.Username+"</button></li>";
+			if(user.isHost=="1"){
+				Ulist.innerHTML+='<li>'+user.name+'-Host</li>'
+			}else{
+				Ulist.innerHTML+='<li>'+user.name+'-Ready</li>'
+			}
+			
+		}
+
+	}*/
+	function UpdateReadyList(){
+		var readyLists=document.getElementsByName("ReadyUserList");
+		var userList = UserList;
+
+		for (var i = readyLists.length - 1; i >= 0; i--) {
+			readyLists[i].innerHTML = "";
+		}
+		for (var i = userList.length - 1; i >= 0; i--) {
+			var user=userList[i];
+			if(userList[i].property==1){
+				for (var j = readyLists.length - 1; j >= 0; j--) {
+						var Ulist =readyLists[j];
+						if(user.isHost=="1"){
+							Ulist.innerHTML+='<li>'+user.name+'-Host</li>'
+						}else{
+							Ulist.innerHTML+='<li>'+user.name+'-Ready</li>'
+						}
+				}
+			}
+		};
+
+	}
+	function UpdateNotAnsweredList(){
+		//TODO
+		var message = "Still waiting for ";
+		var waitingHint=document.getElementById("waitingHint");
+		var userList = GameUserList;
+		var users = [];
+
+		for (var i = userList.length - 1; i >= 0; i--) {
+			var user=userList[i];
+			
+			if(user.AnswerStatus=="0"){
+				users[users.length] = user.Username;	
+			}
+		};
+		message += users.join(", ");
+		console.log(message);
+		
+		waitingHint.innerHTML = message;
+	}
+	function clearNotAnsweredList(){
+		var waitingHint=document.getElementsByName("waitingHint");
+		waitingHint.innerHTML = "";
+	}
+	function ClearReadyList(){
+		var readyLists=document.getElementsByName("ReadyUserList");
+		
+
+		for (var i = readyLists.length - 1; i >= 0; i--) {
+			readyLists[i].innerHTML = "";
+		}
+	}
+	function StartButtonClick(){
+		var numQuestion=document.getElementById("numQuestion").value;
+		SetNumQuestion(numQuestion);
+		startGame();
+		HideItemById("StartButton");
+		HideItemById("Result-StartButton");
+
+
+	}
+
+
+function playsound(){
+	var soundEffect = document.getElementById("ding");
+	//var dingsrouce = document.getElementById("dingsrc");
+		
+		soundEffect.load();
+		soundEffect.play();
+		soundEffect.pause();
+		soundEffect.play();
+		//soundEffect.oncanplay=alert("Can start playing video");
+}
+	function ReadyButtonClick(){
+		
+
+		document.getElementsByName("waitingMsg")[0].removeAttribute("hidden");
+		
+		var name=document.getElementById("Username").value;
+		
+
+//		DeactivateButton("ReadyButton");
+//		DeactivateButton("Result-ReadyButton");
+		HideItemById("ReadyButton");
+		HideItemById("Result-ReadyButton");
+
+		UserIsReady(name);
+		//eventFire(document.querySelector("#SoundPlayBackButton"),'click');
+		soundEffect = document.getElementById("ding");
+		var dingsrouce = document.getElementById("dingsrc");
+		dingsrouce.src="";
+		soundEffect.load();
+		soundEffect.play();
+		soundEffect.pause();
+		dingsrouce.src="./mp3/ding.mp3";
+		
+		
+	}
+	function EnableStartButton(){
+		
+		//ActivateButton("StartButton");
+		//ActivateButton("Result-StartButton");
+		RevealItemById("StartButton");
+		RevealItemById("Result-StartButton");
+
+	}
+	function DisableStartButton(){
+		HideItemById("StartButton");
+		HideItemById("Result-StartButton");
+	}
+	function EnableNumChooser(){
+		RevealItemById("numChooser");
+	}
+	function DisableNumChooser(){
+		HideItemById("numChooser");
+	}
+	function DisplayQuestion(){
+		var questionStr = GetQuestion();
+		ActivateButton("SubmitVoteButton");
+	
+		//GetUsersList()
+		//{Username:'Greg',Rank:1,Count:3}
+
+		// cleaer View
+		HideItemById("GameEnter");
+		HideItemById("GameResult");
+		
+		clearNotAnsweredList();
+
+		RevealItemById("SubmitVoteButton");
+
+		document.getElementsByName("waitingMsg")[0].setAttribute("hidden", true);
+		//HideItemById("")
+		RevealItemById("GameOn");
+		//questionText= document.getElementById("GetQuestion");
+		var questiontags = document.getElementsByName("question");
+		for(var i in questiontags){
+			questiontags[i].innerHTML=questionStr;
+		}
+
+
+
+		var userList = GetGameUsersList();
+		var Ulist= document.getElementById("UsersList");
+		Ulist.innerHTML='';
+			
+		for(var index in userList){
+			var user=userList[index];
+			console.log(user);
+			//Ulist.innerHTML+="<li><button onclick='"+'ListItemClick("'+user.Username+'")'+"'>"+user.Username+"</button></li>";
+		
+				Ulist.innerHTML+='<li name="voteListItem" value="'+user.Username+'" onclick="ListItemClick(this)"/>'+user.Username+'</li>'
+		}
+
+
+
+	};
+	function DisplayResults(){
+		//hide previouse view and display new view
+		document.getElementById("GameOn").setAttribute("hidden",true);
+		document.getElementById("GameResult").removeAttribute("hidden");
+		//document.getElementsByTagName("button").removeAttribute("disabled");
+
+		//document.getElementsByTagName("button").setAttribute("disabled",true);
+
+		//ActivateButton("Result-StartButton");
+		if(gameIsRestart()==1){
+			RevealItemById("Result-RestartButton");
+		}
+		else{
+			ActivateButton("Result-ReadyButton");
+			RevealItemById("Result-ReadyButton");
+		}
+
+		var userList = GetGameUsersList();
+		var Ulist= document.getElementById("UsersRankList");
+			Ulist.innerHTML='';
+		for(var i=0 ;i<userList.length;i++){
+			var user;
+			for(var j=0;j<userList.length;j++){
+				if (userList[j].Rank==i+1) {
+					user=userList[j];
+
+				 };
+			}
+			
+			Ulist.innerHTML+="<li>"+user.Username+" vote:"+user.Count+"</li>";
+
+		}
+		ClearReadyList();
+		
+		//eventFire(document.querySelector("#SoundPlayBackButton"),'click');
+		playsound();
+
+		//
+		
+		//*
+		//var audio = new Audio('./mp3/ding.wav');
+		//audio.play();
+		//*/
+	}
+	
+	function DisplayGameEntry(){
+		//HideItemById("GameOn");
+		initState();
+		
+		ClearReadyList();
+		RevealItemById("GameEnter");
+		HideItemById("GameResult");
+		//HideItemById("waitingMsg");
+		
+		ActivateButton("ReadyButton");
+		RevealItemById("ReadyButton");
+	}
+	
+	function RestartButtonClick(){
+		HideItemById("Result-RestartButton");
+		DisplayGameEntry();
+	}
+	
+	/*
+	function ListItemClick(name){
+		answerQuestion(name);
+		//document.getElementsByTagName("button").setAttribute("disabled",true);
+		var buttons = document.getElementsByTagName("button");
+		for(var index in buttons){
+			console.log(index);
+			buttons[index].removeAttribute("disabled");
+
+		}
+		
+	}*/
+	function SubmitVoteButtonClick(){
+		//var username = GetCheckedRadioName("voteList");
+		var username= GetSelectedVoteListItemByName("voteListItem").getAttribute("value");
+
+		answerQuestion(username);
+		DeactivateButton("SubmitVoteButton");
+		HideItemById("SubmitVoteButton");
+	}
+
+
+
+	//helper functions
+	function GetSelectedVoteListItemByName(name){
+		var elements = document.getElementsByName(name);
+		for (var i = elements.length - 1; i >= 0; i--) {
+			if(elements[i].className=="selected"){
+				return elements[i];
+			}
+		};
+		return null;
+
+	}
+	function GetCheckedRadioName(name) {
+	    var elements = document.getElementsByName(name);
+
+	    for (var i=0, len=elements.length; i<len; ++i){
+	    	if (elements[i].checked) 
+	    		return elements[i].value;
+
+	    }
+	        
+	}
+	function ActivateButton(id){
+		var element = document.getElementById(id);
+		element.removeAttribute("disabled");
+	}
+	function DeactivateButton(id){
+		var element = document.getElementById(id);
+		
+		element.setAttribute("disabled",true);
+
+	}
+	function HideItemById(id){
+		var element = document.getElementById(id)
+		element.setAttribute("hidden",true);
+
+	}
+	function RevealItemById(id){
+		var element = document.getElementById(id)
+		element.removeAttribute("hidden");
+	}
+
+	function ListItemClick(elem){
+		var name=elem.getAttribute("name");
+		console.log("nadfasdfasdfasdfasdfasdfa:"+name);
+		var selectedItem= GetSelectedVoteListItemByName(name);
+		console.log(selectedItem);
+		if(selectedItem!=null){
+			selectedItem.className="";
+		}
+		
+		elem.className = "selected";
+		
+
+	}
+
+
+	//should be implement in whois.hs
+
+	//
+	/*
+	function UserIsReady(name){
+		DisplayQuestion();
+	}
+	function GetUsersList(){
+		return [{Username:'greg',Rank:1,Count:1},{Username:'greg',Rank:2,Count:1}];
+	}
+	function UserPicked(name){
+		DisplayResult();
+
+	}
+	*/
+
+</script>
+</html>
+
