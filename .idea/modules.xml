@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Gears-GC-Android.iml" filepath="$PROJECT_DIR$/Gears-GC-Android.iml" />
-      <module fileurl="file://$PROJECT_DIR$/GearsGameCenter.iml" filepath="$PROJECT_DIR$/GearsGameCenter.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
