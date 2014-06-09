@@ -2,6 +2,7 @@ package info.GearsGC.gearsgamecenter.app;
 
 import android.content.res.Resources;
 import android.net.wifi.WifiManager;
+import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import org.gears.network.GCCommunicationServer;
 
+import java.io.File;
 import java.io.IOException;
 
 
@@ -31,6 +33,31 @@ public class Main extends ActionBarActivity {
         }catch (IOException e){
             e.printStackTrace();
         }
+        boolean mExternalStorageWriteable = false;
+
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            //mExternalStorageAvailable = true;
+            mExternalStorageWriteable = true;
+        } else if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+            //mExternalStorageAvailable = true;
+            mExternalStorageWriteable = false;
+        } else {
+            //mExternalStorageAvailable = false;
+            mExternalStorageWriteable = false;
+        }
+        File exst = getExternalFilesDir(null);
+        String exstPath = exst.getPath();
+        boolean success=false;
+        File fooo = new File(exstPath+"/fooo");
+        Log.d("Path",exstPath);
+        if (!fooo.exists()){
+            Log.d("NotExisit","adsf");
+             success=fooo.mkdir();
+        }
+
+        Log.d("mkdir",String.valueOf(success));
+
 
     }
     @Override
@@ -43,7 +70,7 @@ public class Main extends ActionBarActivity {
         final String formatedIpAddress = String.format("%d.%d.%d.%d", (ipAddress & 0xff), (ipAddress >> 8 & 0xff),
                 (ipAddress >> 16 & 0xff), (ipAddress >> 24 & 0xff));
         textIpaddr.setText("Please access! http://" + formatedIpAddress + ":" + 8080);
-        Log.e("Sdf", "asdf");
+        //Log.e("Sdf", "asdf");
 
     }
 
