@@ -26,8 +26,8 @@ public class Main extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         try{
 
-            webSocketServer = new GCCommunicationServer(8081);
-            httpServer = new HttpServer(8080,getAssets());
+            webSocketServer = new GCCommunicationServer(81);
+            httpServer = new HttpServer(80,getAssets());
             httpServer.start();
             webSocketServer.start();
         }catch (IOException e){
