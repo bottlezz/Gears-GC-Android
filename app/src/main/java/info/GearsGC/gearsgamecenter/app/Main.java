@@ -1,10 +1,9 @@
 package info.GearsGC.gearsgamecenter.app;
 
-import android.content.res.Resources;
 import android.net.wifi.WifiManager;
+import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,20 +14,26 @@ import org.gears.network.GCCommunicationServer;
 import java.io.File;
 import java.io.IOException;
 
+import info.gearsgc.webserver.WebServer;
+
 
 public class Main extends ActionBarActivity {
 
-    private HttpServer httpServer;
+    //private HttpServer httpServer;
     private GCCommunicationServer webSocketServer;
+    private WebServer webServer;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         try{
-
+            AppInternalFileManager fm=new AppInternalFileManager("public");
+            AppAssetManager am = new AppAssetManager(getAssets());
+            webServer=new WebServer(8080,fm,am);
             webSocketServer = new GCCommunicationServer(8081);
-            httpServer = new HttpServer(8080,getAssets());
-            httpServer.start();
+            webServer.start();
             webSocketServer.start();
         }catch (IOException e){
             e.printStackTrace();
@@ -83,7 +88,7 @@ public class Main extends ActionBarActivity {
     protected void onDestroy(){
         try{
             webSocketServer.stop();
-            httpServer.stop();
+            webServer.stop();
         }catch (IOException e){
             e.printStackTrace();
         }catch (InterruptedException e){

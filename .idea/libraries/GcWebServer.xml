@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="GcWebServer">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/app/libs/GcWebServer.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
