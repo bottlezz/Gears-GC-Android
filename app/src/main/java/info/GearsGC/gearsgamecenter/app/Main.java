@@ -31,7 +31,9 @@ public class Main extends ActionBarActivity {
         try{
             AppInternalFileManager fm=new AppInternalFileManager("public");
             AppAssetManager am = new AppAssetManager(getAssets());
+            WebServerRouter router = new WebServerRouter();
             webServer=new WebServer(8080,fm,am);
+            webServer.RegisterRouter(router);
             webSocketServer = new GCCommunicationServer(8081);
             webServer.start();
             webSocketServer.start();
