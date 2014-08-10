@@ -29,7 +29,7 @@ public class Main extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         try{
-            AppInternalFileManager fm=new AppInternalFileManager("public");
+            AppExternalFileManager fm=new AppExternalFileManager();
             AppAssetManager am = new AppAssetManager(getAssets());
             WebServerRouter router = new WebServerRouter();
             webServer=new WebServer(8080,fm,am);
