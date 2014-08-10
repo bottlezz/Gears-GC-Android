@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="GcSocketServer">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/app/libs/GcSocketServer.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
