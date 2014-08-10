@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>GC File Manager</title>
+<script type="text/javascript" src="fileMan.js"></script>
+<script type="text/javascript" src="jquery-2.1.1.min.js"></script>
+</head>
+<body>
+<div id="contentMain">
+	<div id="pathDiv">
+		
+			<span><button class="btn-link" onclick="navigateTo(0)">Root</button>/</span>
+		</div>
+
+	<div id="dirView">
+		<form id="uploadFile" action="GcFileMan/upload"  onsubmit="submitFileUploadForm(this);return false;" enctype="multipart/form-data" method="post">
+			<p>
+				<input type="hidden" name="targetpath" value=""> 
+				<input type="file" name="datafile" size="40">
+				<input type="submit" value ="upload"> 
+			</p>
+		</form>
+		<br/>
+		<button onclick="createDirButtonClick()">Create Folder</button>
+		<ul id="dirContent">
+		</ul>
+	</div>
+</div>
+<div id="dirNameInput" hidden>
+
+	<input id="dirNameInputBox" type="text"></input>
+	<button onclick="createDirSubmit()">Submit</button>
+	<button onclick="createDirCancel()">Cancel</button>
+</div>
+
+</body>
+<script type="text/javascript">
+$(document).ready(getDirContent("/"));
+</script>
+
+</html>
