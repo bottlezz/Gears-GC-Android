@@ -1,5 +1,8 @@
 package info.GearsGC.gearsgamecenter.app;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Environment;
@@ -13,6 +16,10 @@ import org.gears.network.GCCommunicationServer;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.Enumeration;
 
 import info.gearsgc.webserver.WebServer;
 
@@ -53,11 +60,8 @@ public class Main extends ActionBarActivity {
         super.onResume();
 
         TextView textIpaddr = (TextView) findViewById(R.id.ipaddr);
-        WifiManager wifiManager = (WifiManager) getSystemService(WIFI_SERVICE);
-        int ipAddress = wifiManager.getConnectionInfo().getIpAddress();
-        final String formatedIpAddress = String.format("%d.%d.%d.%d", (ipAddress & 0xff), (ipAddress >> 8 & 0xff),
-                (ipAddress >> 16 & 0xff), (ipAddress >> 24 & 0xff));
-        textIpaddr.setText("Please access! http://" + formatedIpAddress + ":" + 8080);
+
+        textIpaddr.setText("Please access! http://" + getLocalIpAddress() + ":" + 8080);
         //Log.e("Sdf", "asdf");
 
     }
@@ -95,8 +99,48 @@ public class Main extends ActionBarActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
+            getLocalIpAddress();
             return true;
         }
+        getLocalIpAddress();
         return super.onOptionsItemSelected(item);
+    }
+    public String getLocalIpAddress() {
+
+
+        try {
+            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
+                NetworkInterface intf = en.nextElement();
+                if (intf.isLoopback()) {
+                    continue;
+                }
+                if (intf.isVirtual()) {
+                    continue;
+                }
+                if (!intf.isUp()) {
+                    continue;
+                }
+                if (intf.isPointToPoint()) {
+                    continue;
+                }
+                if (intf.getHardwareAddress() == null) {
+                    continue;
+                }
+
+
+                for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements(); ) {
+                    InetAddress inetAddress = enumIpAddr.nextElement();
+                    if (!inetAddress.isLoopbackAddress() && (inetAddress.getAddress().length == 4)) {
+                       // Log.i("IPs", inetAddress.getHostAddress());
+                        return inetAddress.getHostAddress();
+
+                    }
+                }
+
+            }
+        } catch (SocketException ex) {
+            Log.e("SocketException", ex.toString());
+        }
+        return null;
     }
 }
