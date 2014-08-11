@@ -29,41 +29,22 @@ public class Main extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         try{
-            AppExternalFileManager fm=new AppExternalFileManager();
+
+            File external = getExternalFilesDir(null);
+
+            AppExternalFileManager fm=new AppExternalFileManager(external);
             AppAssetManager am = new AppAssetManager(getAssets());
             WebServerRouter router = new WebServerRouter();
+
             webServer=new WebServer(8080,fm,am);
             webServer.RegisterRouter(router);
             webSocketServer = new GCCommunicationServer(8081);
             webServer.start();
             webSocketServer.start();
+            //Log.i("test",fm.getRootDirPath());
         }catch (IOException e){
             e.printStackTrace();
         }
-        boolean mExternalStorageWriteable = false;
-
-        String state = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(state)) {
-            //mExternalStorageAvailable = true;
-            mExternalStorageWriteable = true;
-        } else if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
-            //mExternalStorageAvailable = true;
-            mExternalStorageWriteable = false;
-        } else {
-            //mExternalStorageAvailable = false;
-            mExternalStorageWriteable = false;
-        }
-        File exst = getExternalFilesDir(null);
-        String exstPath = exst.getPath();
-        boolean success=false;
-        File fooo = new File(exstPath+"/fooo");
-        Log.d("Path",exstPath);
-        if (!fooo.exists()){
-            Log.d("NotExisit","adsf");
-             success=fooo.mkdir();
-        }
-
-        Log.d("mkdir",String.valueOf(success));
 
 
     }

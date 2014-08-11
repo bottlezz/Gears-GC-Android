@@ -8,18 +8,6 @@
         revision="19.1.0"
         sha1="3499ceba05ca1f6037c6a2fad73df8f636224a28"/>
     <item
-        dex="/Users/gregoryz/AndroidStudioProjects/Gears-GC-Android/app/build/intermediates/pre-dexed/debug/java_websocket-c9954ac76b96ef13b7120bba08a08ee47a2cbf5b.jar"
-        jar="/Users/gregoryz/AndroidStudioProjects/Gears-GC-Android/app/libs/java_websocket.jar"
-        jumboMode="false"
-        revision="19.1.0"
-        sha1="66a3727a3b8edaa597a89fa39748863cfe240115"/>
-    <item
-        dex="/Users/gregoryz/AndroidStudioProjects/Gears-GC-Android/app/build/intermediates/pre-dexed/debug/gson-2.2.4-bff15ec0f3d0ac50159f79ea42932abceffbed00.jar"
-        jar="/Users/gregoryz/AndroidStudioProjects/Gears-GC-Android/app/libs/gson-2.2.4.jar"
-        jumboMode="false"
-        revision="19.1.0"
-        sha1="973e832af433b44c3ed11c426f2f390b29f3f3f8"/>
-    <item
         dex="/Users/gregoryz/AndroidStudioProjects/Gears-GC-Android/app/build/intermediates/pre-dexed/debug/GcSocketServer-a9bdd81cbd4b8170972eb80ad05a8e1008188907.jar"
         jar="/Users/gregoryz/AndroidStudioProjects/Gears-GC-Android/app/libs/GcSocketServer.jar"
         jumboMode="false"
@@ -31,6 +19,18 @@
         jumboMode="false"
         revision="19.1.0"
         sha1="11c7a156f7abe8a2f4893ba1eeabd368efee38f6"/>
+    <item
+        dex="/Users/gregoryz/AndroidStudioProjects/Gears-GC-Android/app/build/intermediates/pre-dexed/debug/java_websocket-c9954ac76b96ef13b7120bba08a08ee47a2cbf5b.jar"
+        jar="/Users/gregoryz/AndroidStudioProjects/Gears-GC-Android/app/libs/java_websocket.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="66a3727a3b8edaa597a89fa39748863cfe240115"/>
+    <item
+        dex="/Users/gregoryz/AndroidStudioProjects/Gears-GC-Android/app/build/intermediates/pre-dexed/debug/gson-2.2.4-bff15ec0f3d0ac50159f79ea42932abceffbed00.jar"
+        jar="/Users/gregoryz/AndroidStudioProjects/Gears-GC-Android/app/libs/gson-2.2.4.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="973e832af433b44c3ed11c426f2f390b29f3f3f8"/>
     <item
         dex="/Users/gregoryz/AndroidStudioProjects/Gears-GC-Android/app/build/intermediates/pre-dexed/debug/support-v4-19.1.0-fe930dc68beb1e566675ce71b270d4091c6c249b.jar"
         jar="/Applications/Android Studio.app/sdk/extras/android/m2repository/com/android/support/support-v4/19.1.0/support-v4-19.1.0.jar"

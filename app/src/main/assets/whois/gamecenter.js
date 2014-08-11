@@ -30,7 +30,7 @@ function GameCenter() {
 		wsPort = "8081";
 		var matches = document.URL.match(/http:\/\/([\d.]+)[\/:].*/);
         var ip = matches[1];
-        //var ip="192.168.0.48";
+        //var ip="localhost";
         console.log("IP: " + ip);
         
 		connection = new WebSocket("ws://" + ip + ":" + wsPort);
@@ -58,8 +58,6 @@ function GameCenter() {
 		console.log("closing");
 	}
 
-	var userList = [];
-
 	var receiveMessage = function(message) {
 		//convert JSON
 		console.log(message);
@@ -70,46 +68,29 @@ function GameCenter() {
 
 			if(receivedMessage.user_id != null) {
 				ID = receivedObject.user_id;
-				
 				return;
 			} else if (receivedMessage.action == "broadcasting") {
-
-		
 				console.log(receivedMessage.body);
 				recievedCallBack(receivedMessage.body);
-			} else if (receivedMessage.action == "get_shared_memory") {
-				receivedSharedMemory(receivedMessage.name, receivedMessage.body);
-			} else if (receivedMessage.action == "user_list"){
-		
-
-				console.log(receiveMessage.userList);
-				receivedUserlist(receivedMessage.userList);
-
+			}else if (receivedMessage.action == "SYNC_LIST"){
+				console.log(receiveMessage);
+				receivedUserlist(receivedMessage);
 			}else {
 				console.log("undefined action: " + receivedMessage.action);
 			}
-
 			console.log("Recevied Message " + receivedMessage);
 		} catch(error) {
 			console.log('message is not a JSON object' + error);
 		}
 	}
 
-	var user = function(name, properties){
-		this.name = name;
-		this.id = null;
-		this.isHost = null;
-		this.properties = properties
-	}
-
-	var sendMessage = function(action, name, body) {
+	var sendMessage = function(action, variables, body) {
 		var timestamp = new Date();
 
 		var message = {
 			"action": action,
+			"variables": variables,
 			"timestamp": timestamp,
-			"userID": null,
-			"name": name,
 			"body": body 
 		}
 
@@ -125,36 +106,13 @@ function GameCenter() {
 		sendMessage("broadcasting", "message", body);
 	}
 
-	this.setSharedMemory = function(name, body) {
-		sendMessage("set_shared_memory", name, body);
-	}
+	var PROPERTY_SEPERATOR = "#PROPERTY#";
 
-	this.getSharedMemory = function(name) {
-		sendMessage("get_shared_memory", name, null);
-	}
-
+	var alreadySet = "0";
 	this.setUser = function(name, property) {
 
-		// var existingUser = 0;
-		// for (var i = this.userList.length - 1; i >= 0; i--) {
-		// 	if(this.userList[i].name = name) {
-		// 		this.userList[i].property = property;
-		// 		existingUser = 1;
-		// 		break;
-		// 	}
-		// };
-
-		// if(!existingUser) {
-			var newUser = new user(name, property);
-			// this.userList.push(newUser);
-		// }
-
-		sendMessage("set_user", name, newUser);
-	}
-
-
-	this.getUserList = function () {
-		sendMessage("get_user_list", null, null);
+		sendMessage("set_user", "", name+PROPERTY_SEPERATOR+property);
+		sendMessage("create_list",'{"key":"UserProperty", "autoSync":"true"}',"");
 	}
 
 }

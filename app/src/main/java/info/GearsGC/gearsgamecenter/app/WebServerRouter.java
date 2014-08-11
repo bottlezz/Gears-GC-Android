@@ -26,7 +26,7 @@ public class WebServerRouter implements GcUrlRouter {
     public List<String> AssetAppList() {
         List<String> apps= new ArrayList<String>();
         apps.add("whois");
-        apps.add("filemanager");
+        apps.add("fileManager");
 
         return apps;
     }

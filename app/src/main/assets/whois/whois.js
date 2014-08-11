@@ -141,7 +141,8 @@ function startGame(){
 	//when sending the start game message
 	//host should broadcase a question
 	//i think we could usethe value:question
-	var dataobject={"type":"startGame", "questionIndex":questionIndex, "questionCount":questionCount};
+	var dataobject={"type":"startGame", "questionIndex":questionIndex, 
+			"questionCount":questionCount, "numQuestion":numQuestion};
     connect.broadcasting(dataobject);
 }
 
@@ -150,7 +151,7 @@ function answerQuestion(name){
 	console.log("name: "+name);
 	var dataobject={type:"answer", value:name, id:myName};
 	connect.broadcasting(dataobject);
-	connect.setUser(myName,{property:NOT_READY});
+	connect.setUser(myName,NOT_READY);
 
 	nextState();
 }
@@ -160,7 +161,7 @@ myName = "";
 function UserIsReady(name){
 	//send the name to the server
 	console.log("UserIsReady");
-	connect.setUser(name, {property:IS_READY});
+	connect.setUser(name, IS_READY);
 	myName= name;
 	GameUserList = [];
 	//GetGameUsersList();
@@ -187,13 +188,46 @@ function receivedSharedMemory(name, body){
 
 }
 
-function receivedUserlist(list){
-	UserList = list;
-	console.log("receivedUserlist:"+list);
+function detectHost(){
+	UserList[0].isHost = "1";
+}
+
+var user = function(name, property){
+	this.name = name;
+	this.id = null;
+	this.isHost = null;
+	this.property= property;
+	this.socket = null;
+}
+
+function receivedUserlist(receivedMessage){
+	var body = receivedMessage.body;
+	console.log("receivedUserlist:"+body);
+	body = body.split("#SYSTEM#");
+
+	var variables = JSON.parse(receivedMessage.variables);
+
+	if(variables.key == "USERSOCKETS"){
+		for(var i=0; i<body.length; i++){
+			UserList[i].socket = body[i];
+		}
+	}
+	else if(variables.key == "USERS"){
+		UserList = [];
+		for(var i=0; i<body.length; i++){
+			var currentBody = body[i].split("#PROPERTY#");
+			var currentUser = new user(currentBody[0], currentBody[1]);
+			UserList.push(currentUser);
+		}
+		return;
+	}
+
+	detectHost();
+
 	//detect host
-	for(var i=0; i<list.length; i++){
-		if(list[i]["name"]==myName){
-			isHost = list[i]["isHost"];
+	for(var i=0; i<UserList.length; i++){
+		if(UserList[i]["name"]==myName){
+			isHost = UserList[i]["isHost"];
 			break;
 		}
 	}
@@ -295,7 +329,7 @@ function recievedCallBack(object){
 			GameUserList = [];
 			mocked_Rank+=1;
 			for (var i=0; i<UserList.length; i++){
-				if(UserList[i]["properties"].property==IS_READY){
+				if(UserList[i].property==IS_READY){
 					var obj = {"Username":UserList[i]["name"], "Rank":UNDEFINED, "Count":0, "AnswerStatus":0};
 					GameUserList.push(obj);
 				}
@@ -305,6 +339,9 @@ function recievedCallBack(object){
 			numExpectedGameAnswer = GameUserList.length;
 			questionIndex = object.questionIndex;
 			questionCount = object.questionCount;
+			numQuestion = object.numQuestion;
+
+			console.log(questionIndex+"//"+questionCount);
 
 			nextState();
 			
