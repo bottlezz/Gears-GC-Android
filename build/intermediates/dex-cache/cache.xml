@@ -18,7 +18,7 @@
         jar="/Users/gregoryz/AndroidStudioProjects/Gears-GC-Android/app/libs/GcWebServer.jar"
         jumboMode="false"
         revision="19.1.0"
-        sha1="11c7a156f7abe8a2f4893ba1eeabd368efee38f6"/>
+        sha1="d64391dc125b9d135fe7d211d21d0b815b1d3299"/>
     <item
         dex="/Users/gregoryz/AndroidStudioProjects/Gears-GC-Android/app/build/intermediates/pre-dexed/debug/java_websocket-c9954ac76b96ef13b7120bba08a08ee47a2cbf5b.jar"
         jar="/Users/gregoryz/AndroidStudioProjects/Gears-GC-Android/app/libs/java_websocket.jar"

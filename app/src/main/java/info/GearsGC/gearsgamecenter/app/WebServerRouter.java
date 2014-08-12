@@ -1,5 +1,7 @@
 package info.GearsGC.gearsgamecenter.app;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,12 +13,12 @@ import info.gearsgc.webserver.GcUrlRouter;
 public class WebServerRouter implements GcUrlRouter {
     @Override
     public String RoutePath(String path) {
-        String lowerPath=path.toLowerCase();
 
         List<String> apps=AssetAppList();
         for(String app : apps){
-            if(lowerPath.endsWith(app+'/')){
+            if(path.endsWith(app+'/')){
                 path+="index.html";
+
             }
         }
         return path;
