@@ -1,35 +1,72 @@
 package info.GearsGC.gearsgamecenter.app;
 
-import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.TextView;
-
-import org.gears.network.GCCommunicationServer;
-
+/**
+ * Created by luna on 2014-08-17.
+ */
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.util.ArrayList;
 import java.util.Enumeration;
+
+import android.os.Bundle;
+import android.app.Activity;
+import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import org.gears.network.GCCommunicationServer;
 
 import info.gearsgc.webserver.WebServer;
 
+public class MainActivity extends Activity {
+    ListView userList;
+    UserCustomAdapter userAdapter;
+    ArrayList<Game> userArray = new ArrayList<Game>();
 
-public class Main extends ActionBarActivity {
-
-    //private HttpServer httpServer;
     private GCCommunicationServer webSocketServer;
     private WebServer webServer;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_old);
+        setContentView(R.layout.activity_main);
+
+        /**
+         * add item in arraylist
+         */
+        userArray.add(new Game("WhoIs", "For 3+ people"));
+        userArray.add(new Game("Mafia", "For 5+ people"));
+        /**
+         * set item into adapter
+         */
+        userAdapter = new UserCustomAdapter(MainActivity.this, R.layout.row,
+                userArray);
+        userList = (ListView) findViewById(R.id.listView);
+        userList.setDividerHeight(7);
+        userList.setItemsCanFocus(false);
+        userList.setAdapter(userAdapter);
+        /**
+         * get on item click listener
+         */
+        userList.setOnItemClickListener(new OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View v,
+                                    final int position, long id) {
+//                Log.i("List View Clicked", "**********");
+//                Toast.makeText(MainActivity.this,
+//                        "List View Clicked:" + position, Toast.LENGTH_LONG)
+//                        .show();
+            }
+        });
+
         try{
 
             File external = getExternalFilesDir(null);
@@ -48,15 +85,15 @@ public class Main extends ActionBarActivity {
             e.printStackTrace();
         }
 
-
     }
+
     @Override
     protected void onResume(){
         super.onResume();
 
         TextView textIpaddr = (TextView) findViewById(R.id.ipaddr);
 
-        textIpaddr.setText("Please access! http://" + getLocalIpAddress() + ":" + 8080);
+        textIpaddr.setText("Please access! http://" + getLocalIpAddress() + ":" + 8080+"\n");
         //Log.e("Sdf", "asdf");
 
     }
@@ -79,29 +116,7 @@ public class Main extends ActionBarActivity {
 
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            getLocalIpAddress();
-            return true;
-        }
-        getLocalIpAddress();
-        return super.onOptionsItemSelected(item);
-    }
     public String getLocalIpAddress() {
-
 
         try {
             for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
@@ -126,7 +141,7 @@ public class Main extends ActionBarActivity {
                 for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements(); ) {
                     InetAddress inetAddress = enumIpAddr.nextElement();
                     if (!inetAddress.isLoopbackAddress() && (inetAddress.getAddress().length == 4)) {
-                       // Log.i("IPs", inetAddress.getHostAddress());
+                        // Log.i("IPs", inetAddress.getHostAddress());
                         return inetAddress.getHostAddress();
 
                     }
@@ -138,4 +153,6 @@ public class Main extends ActionBarActivity {
         }
         return null;
     }
+
 }
+
