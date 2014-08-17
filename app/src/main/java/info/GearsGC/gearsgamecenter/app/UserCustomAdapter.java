@@ -22,6 +22,7 @@ public class UserCustomAdapter extends ArrayAdapter<Game> {
     Context context;
     int layoutResourceId;
     ArrayList<Game> data = new ArrayList<Game>();
+    int activeServerIndex = -1;
 
     public UserCustomAdapter(Context context, int layoutResourceId,
                              ArrayList<Game> data) {
@@ -32,21 +33,21 @@ public class UserCustomAdapter extends ArrayAdapter<Game> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, final ViewGroup parent) {
         View row = convertView;
-        UserHolder holder = null;
+        GameHolder holder = null;
 
         if (row == null) {
             LayoutInflater inflater = ((Activity) context).getLayoutInflater();
             row = inflater.inflate(layoutResourceId, parent, false);
-            holder = new UserHolder();
+            holder = new GameHolder();
             holder.textName = (TextView) row.findViewById(R.id.textView1);
             holder.textInfo = (TextView) row.findViewById(R.id.textView2);
             //holder.textLocation = (TextView) row.findViewById(R.id.textView3);
             holder.btnStart = (Switch) row.findViewById(R.id.button1);
             row.setTag(holder);
         } else {
-            holder = (UserHolder) row.getTag();
+            holder = (GameHolder) row.getTag();
         }
         Game user = data.get(position);
         holder.textName.setText(user.getName());
@@ -60,13 +61,31 @@ public class UserCustomAdapter extends ArrayAdapter<Game> {
                                          boolean isChecked) {
 
                 if (isChecked) {
-                    Log.i("Start checked", "**********");
-                    Toast.makeText(context, "Start!",
-                            Toast.LENGTH_LONG).show();
+//                    Log.i("Start checked", "**********");
+//                    Toast.makeText(context, "Start!"+position,
+//                            Toast.LENGTH_LONG).show();
+
+                    for (int i = 0; i < parent.getChildCount(); i++) {
+                        View v = parent.getChildAt(i);
+                        Switch button = (Switch)v.findViewById(R.id.button1);
+                        if(i==position){
+                            button.setChecked(true);
+                        }
+                        else{
+                            button.setChecked(false);
+                        }
+                    }
+
+                    //TODO
+                    //here we need to start server
+
                 } else {
-                    Log.i("Start unchecked", "**********");
-                    Toast.makeText(context, "End!",
-                            Toast.LENGTH_LONG).show();
+//                    Log.i("Start unchecked", "**********");
+//                    Toast.makeText(context, "End!",
+//                            Toast.LENGTH_LONG).show();
+
+                    //TODO
+                    //here we need to stop server
                 }
             }
         });
@@ -75,7 +94,7 @@ public class UserCustomAdapter extends ArrayAdapter<Game> {
 
     }
 
-    static class UserHolder {
+    static class GameHolder {
         TextView textName;
         TextView textInfo;
         Switch btnStart;

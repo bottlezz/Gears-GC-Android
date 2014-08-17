@@ -43,6 +43,7 @@ public class MainActivity extends Activity {
          */
         userArray.add(new Game("WhoIs", "For 3+ people"));
         userArray.add(new Game("Mafia", "For 5+ people"));
+        userArray.add(new Game("Dummy", "For fuuuun"));
         /**
          * set item into adapter
          */
