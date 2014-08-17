@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="2dp"
-    android:background="#9D8D46"
+    android:background="#ff9d9376"
     tools:context=".MainActivity" >
 
     <TextView
@@ -12,6 +12,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
+        android:paddingLeft="15dp"
+        android:paddingRight="0dp"
         android:text="User Name"
         android:textColor="#FFFFFF"
         android:textAppearance="?android:attr/textAppearanceLarge" />
@@ -23,6 +25,8 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/textView1"
         android:layout_marginTop="5dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="0dp"
         android:text="Address"
         android:textColor="#FFFFFF"
         android:textAppearance="?android:attr/textAppearanceLarge"
@@ -31,10 +35,10 @@
     <Switch
         android:id="@+id/button1"
         android:layout_width="100dp"
-        android:layout_height="40dp"
+        android:layout_height="50dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:background="#9D8D46"
+        android:background="#ff9d9376"
         android:focusable="false"
         android:focusableInTouchMode="false"
         android:text="Start"
