@@ -15,11 +15,15 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.content.ClipboardManager;
+import android.content.ClipData;
 
 import org.gears.network.GCCommunicationServer;
 
@@ -68,6 +72,23 @@ public class MainActivity extends Activity {
             }
         });
 
+        ImageView copy = (ImageView) findViewById(R.id.copy);
+        copy.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ClipboardManager _clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                ClipData _clip;
+                TextView ip = (TextView)findViewById(R.id.ipaddr);
+                String text = ip.getText().toString();
+                _clip = ClipData.newPlainText("ip", text);
+                _clipboard.setPrimaryClip(_clip);
+
+                Toast.makeText(MainActivity.this,
+                        "Ip Address copied to clipboard.", Toast.LENGTH_LONG)
+                        .show();
+            }
+        });
+
         try{
 
             File external = getExternalFilesDir(null);
@@ -93,8 +114,10 @@ public class MainActivity extends Activity {
         super.onResume();
 
         TextView textIpaddr = (TextView) findViewById(R.id.ipaddr);
+        TextView textIpinfo = (TextView) findViewById(R.id.ipinfo);
 
-        textIpaddr.setText("Please access! http://" + getLocalIpAddress() + ":" + 8080+"\n");
+        textIpinfo.setText("No game server is running.");
+        textIpaddr.setText("" + getLocalIpAddress() + ":" + 8080);
         //Log.e("Sdf", "asdf");
 
     }

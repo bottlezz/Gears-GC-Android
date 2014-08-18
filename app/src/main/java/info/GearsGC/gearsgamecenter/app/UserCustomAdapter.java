@@ -78,6 +78,7 @@ public class UserCustomAdapter extends ArrayAdapter<Game> {
 
                     //TODO
                     //here we need to start server
+                    //update text of R.id.ipaddr
 
                 } else {
 //                    Log.i("Start unchecked", "**********");

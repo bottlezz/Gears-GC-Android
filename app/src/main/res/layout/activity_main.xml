@@ -16,14 +16,38 @@
         android:textSize="35sp" />
 
     <TextView
+        android:id="@+id/ipinfo"
+        android:layout_below="@+id/textView"
+        android:paddingLeft="40dp"
+        android:paddingRight="0dp"
+        android:text="No game server is running:"
+        android:textSize="14sp"
+        android:textColor="#A1914D"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
         android:id="@+id/ipaddr"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView"
-        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/ipinfo"
+        android:paddingLeft="40dp"
+        android:paddingRight="0dp"
+        android:paddingBottom="20dp"
         android:text="192.168.0.0"
         android:textColor="#A1914D"
         android:textSize="14sp" />
+
+    <ImageView
+        android:id="@+id/copy"
+        android:layout_width="72dp"
+        android:layout_height="32dp"
+        android:src="@drawable/copy"
+        android:layout_below="@+id/textView"
+        android:layout_alignParentRight="true"
+        android:paddingLeft="0dp"
+        android:paddingRight="40dp"
+        />
 
     <ListView
         android:id="@+id/listView"
