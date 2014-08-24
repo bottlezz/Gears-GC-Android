@@ -81,7 +81,10 @@ public class MainActivity extends Activity {
 //                        "List View Clicked:" + position, Toast.LENGTH_LONG)
 //                        .show();
                 try{
-                    Log.i("nameINfo",userArray.get(position).getName());
+                    Game selected=userArray.get(position);
+                    TextView ip = (TextView)findViewById(R.id.ipaddr);
+                    ip.setText( getLocalIpAddress() + ":" + "8080"+"/"+selected.getName()+"/index.html");
+                    Log.i("nameINfo",selected.getName());
                     webServer.stop();
 
                     //if(webSocketServer.)
