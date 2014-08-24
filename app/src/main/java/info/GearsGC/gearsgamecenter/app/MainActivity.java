@@ -36,18 +36,29 @@ public class MainActivity extends Activity {
 
     private GCCommunicationServer webSocketServer;
     private WebServer webServer;
+    private WebServerRouter webRouter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        File external = getExternalFilesDir(null);
+
+        AppExternalFileManager fm=new AppExternalFileManager(external);
+        AppAssetManager am = new AppAssetManager(getAssets());
+        webRouter = new WebServerRouter();
         /**
          * add item in arraylist
          */
-        userArray.add(new Game("WhoIs", "For 3+ people"));
-        userArray.add(new Game("Mafia", "For 5+ people"));
-        userArray.add(new Game("Dummy", "For fuuuun"));
+
+        userArray.add(new Game("whois", "For 3+ people"));
+        userArray.add(new Game("fileManager", "for upload and remove files"));
+        userArray.addAll(fm.getGameList());
+        //userArray.add(new Game("WhoIs", "For 3+ people"));
+        //userArray.add(new Game("Mafia", "For 5+ people"));
+        //userArray.add(new Game("Dummy", "For fuuuun"));
         /**
          * set item into adapter
          */
@@ -69,6 +80,28 @@ public class MainActivity extends Activity {
 //                Toast.makeText(MainActivity.this,
 //                        "List View Clicked:" + position, Toast.LENGTH_LONG)
 //                        .show();
+                try{
+                    Log.i("nameINfo",userArray.get(position).getName());
+                    webServer.stop();
+
+                    //if(webSocketServer.)
+                    //webServer.stop();
+                    if (webSocketServer!=null)webSocketServer.stop();
+                    webSocketServer = new GCCommunicationServer(8081);
+                    webRouter.OnlyAllowPath(userArray.get(position).getName());
+
+                    webServer.RegisterRouter(webRouter);
+                    webServer.start();
+                    webSocketServer.start();
+
+                }catch (IOException e){
+                    Log.e("error","failed restart server");
+                }catch (Exception e){
+                    Log.e("error","failed Restart Socket server");
+                }
+
+
+
             }
         });
 
@@ -89,23 +122,18 @@ public class MainActivity extends Activity {
             }
         });
 
-        try{
+        //try{
 
-            File external = getExternalFilesDir(null);
-
-            AppExternalFileManager fm=new AppExternalFileManager(external);
-            AppAssetManager am = new AppAssetManager(getAssets());
-            WebServerRouter router = new WebServerRouter();
 
             webServer=new WebServer(8080,fm,am);
-            webServer.RegisterRouter(router);
-            webSocketServer = new GCCommunicationServer(8081);
-            webServer.start();
-            webSocketServer.start();
+            //webServer.RegisterRouter(webRouter);
+            //webSocketServer = new GCCommunicationServer(8081);
+            //webServer.start();
+            //webSocketServer.start();
             //Log.i("test",fm.getRootDirPath());
-        }catch (IOException e){
-            e.printStackTrace();
-        }
+        //}catch (IOException e){
+          //  e.printStackTrace();
+       // }
 
     }
 

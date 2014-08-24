@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.util.ArrayList;
+import java.util.List;
 
 import info.gearsgc.webserver.GcFileManager;
 
@@ -188,5 +190,26 @@ public class AppExternalFileManager implements GcFileManager {
         }
 
         return true;
+    }
+    public ArrayList<Game> getGameList(){
+        ArrayList<Game> gameList = new ArrayList<Game>();
+
+        String path;
+        try{
+            path=getRootDirPath();
+        }catch (IOException e){
+            return gameList;
+        }
+
+        File file = new File(path);
+        for ( File fileEntry : file.listFiles()) {
+            if (fileEntry.isDirectory()) {
+                Game g= new Game(fileEntry.getName(),"");
+                gameList.add(g);
+            }
+
+        }
+        return gameList;
+
     }
 }
